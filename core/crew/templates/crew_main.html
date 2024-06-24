@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Data Category</h6>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+        <a href="category_create" class="btn btn-primary">Add Category</a>
+      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Nama</th>
+            <th>Job</th>
+            <th>Email</th>
+            <th>No HP</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <!-- <tfoot>
+          <tr>
+            <th>No.</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Action</th>
+          </tr>
+        </tfoot> -->
+        <tbody>
+            {% for item in crews %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.crew_name }}</td>
+                <td>{{ item.job }}</td>
+                <td>{{ item.email }}</td>
+                <td>{{ item.no_hp }}</td>
+                <td>
+                    <a href="#", class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
