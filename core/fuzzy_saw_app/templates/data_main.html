@@ -4,11 +4,11 @@
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">Data Crew</h6>
+    <h6 class="m-0 font-weight-bold text-primary">Data Kriteria</h6>
   </div>
   <div class="card-body">
     <div class="table-responsive">
-        <a href="crew_create" class="btn btn-primary">Add Crew</a>
+        <a href="{% url 'data_input'%}" class="btn btn-primary">Add Kriteria</a>
         <p>
           {% if messages %}
             <ul class="messages">
@@ -24,9 +24,9 @@
           <tr>
             <th>No.</th>
             <th>Nama</th>
-            <th>Job</th>
-            <th>Email</th>
-            <th>No HP</th>
+            <th>K1</th>
+            <th>K2</th>
+            <th>K3</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -39,24 +39,26 @@
           </tr>
         </tfoot> -->
         <tbody>
-            {% for item in crews %}
+            {% for item in kriteria %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ item.crew_name }}</td>
-                <td>{{ item.job }}</td>
-                <td>{{ item.email }}</td>
-                <td>{{ item.no_hp }}</td>
+                <td>{{ item.crew.crew_name }}</td>
+                <td>{{ item.K1 }}</td>
+                <td>{{ item.K2 }}</td>
+                <td>{{ item.K3 }}</td>
                 <td>
-                    <a href = "{% url 'delete' item.id%}", class="btn btn-danger">Delete</a>
-                    <a href="{% url 'crew_edit' item.id%}", class="btn btn-success">Edit</a>
+                    <a href = "{% url 'data_delete' item.id%}", class="btn btn-danger">Delete</a>
+                    {% comment %} <a href="{% url 'data_edit' item.id%}", class="btn btn-success">Edit</a> {% endcomment %}
                 </td>
             </tr>
             {% endfor %}
         </tbody>
       </table>
+      <br>
+      <div class="text-center">
+        <a href="{% url 'data_calculate' %}" class="btn btn-success">Hitung</a>
+      </div>
     </div>
   </div>
 </div>
-
-
 {% endblock %}

@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('login.urls')),
     path('dashboard/', include('dashboard.urls')),
-    path('crew/', include('crew.urls'))
+    path('crew/', include('crew.urls')),
+    path('fuzzy_saw_app/', include('fuzzy_saw_app.urls'))
 ]
