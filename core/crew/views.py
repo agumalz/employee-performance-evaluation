@@ -2,10 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from . forms import CrewForm
 from . models import Job, Crew
+from django.http import HttpResponseForbidden
 
 # Create your views here.
 
 def crew_main(request):
+    if request.user.profile.position == 'crew':
+        return HttpResponseForbidden("Anda tidak memiliki akses ke halaman ini.")
     crews = Crew.objects.all()
     context = {
         'crews' : crews
@@ -36,6 +39,7 @@ def crew_edit(request, id):
             return redirect('crew_main') 
     else:
         form = CrewForm(instance=crews)
+        
     context = {
         'form': form,
         'crews': crews

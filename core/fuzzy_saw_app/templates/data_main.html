@@ -48,7 +48,7 @@
                 <td>{{ item.K3 }}</td>
                 <td>
                     <a href = "{% url 'data_delete' item.id%}", class="btn btn-danger">Delete</a>
-                    {% comment %} <a href="{% url 'data_edit' item.id%}", class="btn btn-success">Edit</a> {% endcomment %}
+                    <a href = "{% url 'data_edit' item.id%}", class="btn btn-primary">Edit</a>
                 </td>
             </tr>
             {% endfor %}

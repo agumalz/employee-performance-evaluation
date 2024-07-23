@@ -1,9 +1,11 @@
 from django.urls import path
-from .views import data_input, data_calculate, data_main, data_delete, data_edit
+from . import views
 
 urlpatterns = [
-    path('data_main/', data_main, name='data_main'),
-    path('data_input/', data_input, name='data_input'),
-    path('data_calculate/', data_calculate, name='data_calculate'),
-    path('data_delete/<int:id>/', data_delete, name='data_delete')
+    path('', views.data_main, name='data_main'),
+    path('edit/<int:id>/', views.data_edit, name='data_edit'),
+    path('input/', views.data_input, name='data_input'),
+    path('delete/<int:id>/', views.data_delete, name='data_delete'),
+    path('calculate/', views.data_calculate, name='data_calculate'),
+    path('visualisasi_data/', views.visualisasi_data, name='visualisasi_data'),
 ]

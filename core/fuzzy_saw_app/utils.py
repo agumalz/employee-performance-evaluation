@@ -1,3 +1,5 @@
+from django.http import HttpResponseForbidden
+
 def fuzzy_membership(value, category):
     if category == 'rendah':
         if value <= 50:
@@ -48,3 +50,7 @@ def normalization(defuzzified_values):
 def saw(normalized_values, weights):
     preferences = [sum(val * weight for val, weight in zip(row, weights)) for row in normalized_values]
     return preferences
+
+def crew_forbidden(request):
+    if request.user.profile.position == 'crew':
+        return HttpResponseForbidden("Anda tidak memiliki akses ke halaman ini.")
