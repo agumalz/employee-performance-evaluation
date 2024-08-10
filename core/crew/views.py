@@ -1,20 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from . forms import CrewForm
-from . models import Job, Crew
 from django.http import HttpResponseForbidden
+from .forms import CrewForm
+from .models import Crew
+from kriteria.decorators import check_permission 
 
-# Create your views here.
-
+@check_permission
 def crew_main(request):
-    if request.user.profile.position == 'crew':
-        return HttpResponseForbidden("Anda tidak memiliki akses ke halaman ini.")
-    crews = Crew.objects.all()
-    context = {
-        'crews' : crews
-    }
-    return render(request, 'crew_main.html', context)
+    crews = Crew.objects.all().prefetch_related('nilai_kriteria__kriteria')  # Prefetch nilai kriteria untuk efisiensi
+    return render(request, 'crew_main.html', {'crews': crews})
 
+@check_permission
 def crew_create(request):
     if request.method == "POST":
         form = CrewForm(request.POST)
@@ -24,30 +20,29 @@ def crew_create(request):
             return redirect('crew_main')
         else:
             messages.error(request, 'Tambah Crew Gagal')
-            # return render(request, 'crew_create.html', {'form' : form})
     else:
         form = CrewForm()
     return render(request, 'crew_create.html', {'form': form})
 
+@check_permission
 def crew_edit(request, id):
-    crews = get_object_or_404(Crew, id=id)
+    crew = get_object_or_404(Crew, id=id)
     if request.method == 'POST':
-        form = CrewForm(request.POST, instance=crews)
+        form = CrewForm(request.POST, instance=crew)
         if form.is_valid():
             form.save()
             messages.success(request, 'Crew berhasil diperbarui.')
             return redirect('crew_main') 
     else:
-        form = CrewForm(instance=crews)
-        
-    context = {
-        'form': form,
-        'crews': crews
-    }
-    return render(request, 'crew_edit.html', context)
+        form = CrewForm(instance=crew)
+    
+    return render(request, 'crew_edit.html', {'form': form, 'crew': crew})
 
+@check_permission
 def crew_delete(request, id):
     crew = get_object_or_404(Crew, id=id)
-    crew.delete()
-    messages.success(request, 'Crew Berhasil Dihapus')
+    if request.method == "POST":
+        crew.delete()
+        messages.success(request, 'Crew Berhasil Dihapus')
     return redirect('crew_main')
+    # return render(request, 'crew_confirm_delete.html', {'crew': crew})

@@ -12,11 +12,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='crew',
-            name='email',
-            field=models.CharField(blank=True, max_length=255, null=True),
-        ),
-        migrations.AddField(
-            model_name='crew',
             name='no_hp',
             field=models.CharField(blank=True, max_length=255, null=True),
         ),

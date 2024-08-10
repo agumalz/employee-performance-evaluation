@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h2 class="m-0 font-weight-bold text-primary text-center">Data Kriteria</h2>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+        <a href="kriteria_create" class="btn btn-primary">Tambah</a>
+        <p>
+          {% if messages %}
+            <ul class="messages">
+              {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </p>
+        
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Nama</th>
+                    <th>Deskripsi</th>
+                    <th>Bobot</th>
+                    <th>Jenis</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for kriteria in kriteria_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ kriteria.nama }}</td>
+                        <td>{{ kriteria.deskripsi }}</td>
+                        <td>{{ kriteria.get_tingkat_kepentingan_display }}</td>
+                        <td>{{ kriteria.get_jenis_display }}</td>
+                        <td>
+                            <a href="{% url 'kriteria_edit' kriteria.id %}" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{% url 'kriteria_delete' kriteria.id %}" method="post" style="display:inline;" onsubmit="return confirmDelete();">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function confirmDelete() {
+      return confirm('Apakah Anda yakin ingin menghapus data kriteria ini?');
+  }
+</script>
+
+{% endblock %}

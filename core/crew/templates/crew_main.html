@@ -4,11 +4,11 @@
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">Data Crew</h6>
+    <h2 class="m-0 font-weight-bold text-primary text-center">Data Karyawan</h2>
   </div>
   <div class="card-body">
     <div class="table-responsive">
-        <a href="crew_create" class="btn btn-primary">Add Crew</a>
+        <a href="crew_create" class="btn btn-primary">Tambah</a>
         <p>
           {% if messages %}
             <ul class="messages">
@@ -25,30 +25,27 @@
             <th>No.</th>
             <th>Nama</th>
             <th>Job</th>
-            <th>Email</th>
+            <th>Store</th>
             <th>No HP</th>
+            <th>Tanggal Masuk</th>
             <th>Action</th>
           </tr>
         </thead>
-        <!-- <tfoot>
-          <tr>
-            <th>No.</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Action</th>
-          </tr>
-        </tfoot> -->
         <tbody>
             {% for item in crews %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ item.crew_name }}</td>
-                <td>{{ item.job }}</td>
-                <td>{{ item.email }}</td>
+                <td>{{ item.nama }}</td>
+                <td>{{ item.posisi }}</td>
+                <td>{{ item.store }}</td>
                 <td>{{ item.no_hp }}</td>
+                <td>{{ item.tanggal_masuk }}</td>
                 <td>
-                    <a href = "{% url 'delete' item.id%}", class="btn btn-danger">Delete</a>
-                    <a href="{% url 'crew_edit' item.id%}", class="btn btn-success">Edit</a>
+                  <a href="{% url 'crew_edit' item.id %}" class="btn btn-success btn-sm">Edit</a>
+                  <form action="{% url 'delete' item.id %}" method="post" style="display:inline;" onsubmit="return confirmDelete();">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                  </form>
                 </td>
             </tr>
             {% endfor %}
@@ -58,5 +55,11 @@
   </div>
 </div>
 
+
+<script>
+  function confirmDelete() {
+      return confirm('Apakah Anda yakin ingin menghapus data karyawan ini?');
+  }
+</script>
 
 {% endblock %}

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Konfirmasi Hapus Kriteria</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Konfirmasi Hapus Kriteria</h1>
+        <p>Apakah Anda yakin ingin menghapus kriteria "{{ kriteria.nama }}"?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Hapus</button>
+            <a href="{% url 'kriteria_list' %}" class="btn btn-secondary">Batal</a>
+        </form>
+    </div>
+</body>
+</html>

@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'login',
     'crew',
     'dashboard',
-    'fuzzy_saw_app',
+    'kriteria',
 ]
 
 MIDDLEWARE = [
