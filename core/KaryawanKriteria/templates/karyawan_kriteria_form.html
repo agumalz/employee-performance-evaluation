@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center mt-4">
+    <div class="card shadow mb-4" style="width: 60%;">
+        <div class="card-header py-3">
+            <a href="{% url 'karyawan_kriteria_list' %}" class="btn btn-secondary mt-2">Kembali</a>
+            <h2 class="m-0 font-weight-bold text-primary text-center">Tambah Penilaian</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Simpan Penilaian</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

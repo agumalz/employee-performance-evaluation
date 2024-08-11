@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h2 class="m-0 font-weight-bold text-primary text-center">Daftar Penilaian Karyawan</h2>
+        <a href="{% url 'karyawan_kriteria_create' %}" class="btn btn-primary mt-2">Tambah Penilaian</a>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nama Karyawan</th>
+                    {% for kriteria in kriteria_list %}
+                        <th>{{ kriteria.nama }}</th>
+                    {% endfor %}
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for penilaian in penilaian_data %}
+                <tr>
+                    <td>{{ penilaian.karyawan }}</td>
+                    {% for item in penilaian.nilai_kriteria %}
+                        <td>
+                            {% if item.nilai is not None %}
+                                {{ item.nilai }}
+                            {% else %}
+                                <em>Tidak ada nilai</em>
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                    <td>
+                        <a href="{% url 'karyawan_kriteria_edit' penilaian.karyawan_id %}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{% url 'karyawan_kriteria_delete' penilaian.karyawan_id %}" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus penilaian ini?');">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

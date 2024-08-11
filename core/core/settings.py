@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'crew',
     'dashboard',
     'kriteria',
+    'KaryawanKriteria',
 ]
 
 MIDDLEWARE = [

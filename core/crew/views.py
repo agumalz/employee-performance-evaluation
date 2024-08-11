@@ -7,7 +7,7 @@ from kriteria.decorators import check_permission
 
 @check_permission
 def crew_main(request):
-    crews = Crew.objects.all().prefetch_related('nilai_kriteria__kriteria')  # Prefetch nilai kriteria untuk efisiensi
+    crews = Crew.objects.all()
     return render(request, 'crew_main.html', {'crews': crews})
 
 @check_permission

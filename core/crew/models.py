@@ -1,5 +1,4 @@
 from django.db import models
-from kriteria.models import Kriteria
 
 # Create your models here.
 
@@ -26,12 +25,4 @@ class Crew(models.Model):
     
     def __str__(self):
         return self.nama
-    
-class NilaiKriteria(models.Model):
-    crew = models.ForeignKey(Crew, on_delete=models.CASCADE, related_name='nilai_kriteria')
-    kriteria = models.ForeignKey(Kriteria, on_delete=models.CASCADE)
-    nilai = models.FloatField()
-
-    def __str__(self):
-        return f'{self.crew.nama} - {self.kriteria.nama}: {self.nilai}'
     

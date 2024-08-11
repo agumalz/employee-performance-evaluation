@@ -23,4 +23,5 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls', namespace='dashboard')),
     path('crew/', include('crew.urls')),
     path('kriteria/', include('kriteria.urls')),
+    path('KaryawanKriteria/', include('KaryawanKriteria.urls')),
 ]
