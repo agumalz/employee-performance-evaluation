@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'dashboard',
     'kriteria',
     'KaryawanKriteria',
+    'perhitungan_fuzzy',
 ]
 
 MIDDLEWARE = [

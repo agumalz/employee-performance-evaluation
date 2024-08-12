@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Hasil Defuzzifikasi untuk Semua Karyawan</h2>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover shadow">
+            <thead class="bg-primary">
+                <tr>
+                    <th scope="col" class="text-center" style="color: white; font-size: 1.1rem;">Nama Karyawan</th>
+                    <th scope="col" class="text-center" style="color: white; font-size: 1.1rem;">Hasil Defuzzifikasi</th>
+                    <th scope="col" class="text-center" style="color: white; font-size: 1.1rem;">Kinerja</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in defuzzifikasi_results %}
+                <tr>
+                    <td class="text-center">{{ result.karyawan.nama }}</td>
+                    <td class="text-center">{{ result.hasil_akhir|floatformat:2 }}</td>
+                    <td class="text-center">
+                        {% if result.kinerja == "Baik" %}
+                            <span style="color: #28a745; font-weight: bold; font-size: 1.1rem;">{{ result.kinerja }}</span>
+                        {% else %}
+                            <span style="color: #dc3545; font-weight: bold; font-size: 1.1rem;">{{ result.kinerja }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'karyawan_kriteria_overview' %}" class="btn btn-secondary btn-lg">Kembali ke Overview Karyawan</a>
+    </div>
+</div>
+{% endblock %}
