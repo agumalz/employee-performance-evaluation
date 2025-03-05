@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Hasil Perhitungan Fuzzy dan SAW</h2>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="bg-primary text-center">
+                <tr>
+                    <th style="color: white; width: 10%;">Ranking</th>
+                    <th style="color: white; width: 35%;">Nama Karyawan</th>
+                    <th style="color: white; width: 30%;">Hasil Perhitungan Fuzzy Tsukamoto (Kinerja)</th>
+                    <th style="color: white; width: 25%;">Hasil Perhitungan SAW (Nilai Preferensi)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in hasil_perhitungan %}
+                <tr>
+                    <td class="text-center font-weight-bold">{{ forloop.counter }}</td>
+                    <td class="text-center font-weight-bold">{{ data.karyawan.nama }}</td>
+                    <td class="text-center font-weight-bold {% if data.fuzzy == 'Baik' %}text-success{% elif data.fuzzy == 'Buruk' %}text-danger{% endif %}">{{ data.fuzzy }}</td>
+                    <td class="text-center">
+                        {% if data.saw_total_score is not None %}
+                            {{ data.saw_total_score|floatformat:2 }}
+                        {% else %}
+                            <em class="text-muted">Belum dihitung</em>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Tempat Tanda Tangan: Hanya Muncul Saat Cetak -->
+    <div class="row mt-4 tanda-tangan-print" style="page-break-inside: avoid;">
+        <div class="col-12">
+            <p>Mengetahui,</p>
+            <p><strong>Manager</strong></p>
+            <br><br><br>
+            <p>(__________________)</p>
+        </div>
+    </div>
+
+    <!-- Tombol Cetak dan Kembali -->
+    <div class="text-center mt-4 no-print">
+        <button class="btn btn-success btn-lg" onclick="window.print()">
+            <i class="fas fa-print"></i> Cetak
+        </button>
+        <a href="javascript:history.back()" class="btn btn-secondary btn-lg">
+            <i class="fas fa-arrow-left"></i> Kembali
+        </a>
+    </div>
+</div>
+
+<!-- CSS untuk Tampilan dan Pencetakan -->
+<style>
+    /* Sembunyikan tempat tanda tangan pada tampilan biasa */
+    .tanda-tangan-print {
+        display: none;
+    }
+
+    /* Pengaturan untuk mencetak dalam ukuran A4 */
+    @page {
+        size: A4;
+        margin: 10mm;
+    }
+
+    @media print {
+        /* Sembunyikan semua elemen dengan kelas no-print saat mencetak */
+        .no-print {
+            display: none;
+        }
+
+        /* Tampilkan tempat tanda tangan hanya saat mencetak */
+        .tanda-tangan-print {
+            display: block;
+            page-break-inside: avoid; /* Mencegah tanda tangan terpisah ke halaman berikutnya */
+        }
+
+        /* Pastikan judul, tabel, dan tanda tangan tetap di halaman yang sama */
+        h2, table, .row {
+            page-break-inside: avoid;
+        }
+
+        /* Mengatur ukuran font dan skala tabel agar muat di halaman A4 */
+        table {
+            width: 100%;
+            font-size: 9px; /* Kurangi ukuran font untuk lebih banyak data muat di halaman */
+        }
+
+        th, td {
+            padding: 2px; /* Kurangi padding untuk menghemat ruang */
+        }
+
+        /* Menyembunyikan margin/padding untuk mencetak */
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Menyusun tanda tangan di sebelah kanan */
+        .tanda-tangan-print {
+            text-align: center;
+            padding-left: 350px;
+            margin-top: 50px;
+        }
+
+        /* Mengatur margin tanda tangan */
+        .row {
+            margin-top: 20px;
+        }
+    }
+</style>
+{% endblock %}

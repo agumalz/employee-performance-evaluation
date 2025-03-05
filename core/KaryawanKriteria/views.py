@@ -11,28 +11,13 @@ def karyawan_kriteria_list(request):
 
     penilaian_data = []
     for karyawan in karyawan_list:
-        nilai_kriteria = []
-        for kriteria in kriteria_list:
-            try:
-                nilai = KaryawanKriteria.objects.get(karyawan=karyawan, kriteria=kriteria).nilai
-            except KaryawanKriteria.DoesNotExist:
-                nilai = None
-            nilai_kriteria.append({
-                'kriteria': kriteria.nama,
-                'nilai': nilai
-            })
-        penilaian_data.append({
-            'karyawan': karyawan.nama,
-            'karyawan_id': karyawan.id,
-            'nilai_kriteria': nilai_kriteria
-        })
+        nilai_kriteria = [
+            {'kriteria': kriteria.nama, 'nilai': KaryawanKriteria.objects.filter(karyawan=karyawan, kriteria=kriteria).first().nilai if KaryawanKriteria.objects.filter(karyawan=karyawan, kriteria=kriteria).exists() else None}
+            for kriteria in kriteria_list
+        ]
+        penilaian_data.append({'karyawan': karyawan.nama, 'karyawan_id': karyawan.id, 'nilai_kriteria': nilai_kriteria})
 
-    context = {
-        'penilaian_data': penilaian_data,
-        'kriteria_list': kriteria_list,
-    }
-
-    return render(request, 'karyawan_kriteria_list.html', context)
+    return render(request, 'karyawan_kriteria_list.html', {'penilaian_data': penilaian_data, 'kriteria_list': kriteria_list})
 
 def karyawan_kriteria_create(request):
     if request.method == 'POST':
@@ -44,35 +29,27 @@ def karyawan_kriteria_create(request):
     else:
         form = KaryawanKriteriaForm()
 
-    return render(request, 'karyawan_kriteria_form.html', {'form': form})
+    return render(request, 'karyawan_kriteria_form.html', {'form': form, 'is_edit': False})
 
 def karyawan_kriteria_edit(request, karyawan_id):
     karyawan = get_object_or_404(Crew, id=karyawan_id)
-    kriteria_list = Kriteria.objects.all()
-    
+
     if request.method == 'POST':
         form = KaryawanKriteriaForm(request.POST)
         if form.is_valid():
-            for kriteria in kriteria_list:
-                nilai = form.cleaned_data.get(f'nilai_{kriteria.id}')
-                if nilai is not None:
-                    KaryawanKriteria.objects.update_or_create(
-                        karyawan=karyawan,
-                        kriteria=kriteria,
-                        defaults={'nilai': nilai}
-                    )
+            form.save()
             messages.success(request, 'Penilaian karyawan berhasil diperbarui.')
             return redirect('karyawan_kriteria_list')
     else:
-        form = KaryawanKriteriaForm(initial={'karyawan': karyawan})
-        for kriteria in kriteria_list:
-            try:
-                nilai = KaryawanKriteria.objects.get(karyawan=karyawan, kriteria=kriteria).nilai
-                form.fields[f'nilai_{kriteria.id}'].initial = nilai
-            except KaryawanKriteria.DoesNotExist:
-                pass
+        initial_data = {'karyawan': karyawan}
+        for kriteria in Kriteria.objects.all():
+            nilai = KaryawanKriteria.objects.filter(karyawan=karyawan, kriteria=kriteria).first()
+            if nilai:
+                initial_data[f'nilai_{kriteria.id}'] = nilai.nilai
 
-    return render(request, 'karyawan_kriteria_form.html', {'form': form})
+        form = KaryawanKriteriaForm(initial=initial_data)
+
+    return render(request, 'karyawan_kriteria_form.html', {'form': form, 'is_edit': True})
 
 def karyawan_kriteria_delete(request, karyawan_id):
     karyawan = get_object_or_404(Crew, id=karyawan_id)

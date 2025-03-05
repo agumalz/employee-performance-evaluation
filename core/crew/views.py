@@ -4,6 +4,7 @@ from django.http import HttpResponseForbidden
 from .forms import CrewForm
 from .models import Crew
 from kriteria.decorators import check_permission 
+from django import forms
 
 @check_permission
 def crew_main(request):
@@ -38,11 +39,25 @@ def crew_edit(request, id):
     
     return render(request, 'crew_edit.html', {'form': form, 'crew': crew})
 
+# @check_permission
+# def crew_delete(request, id):
+#     crew = get_object_or_404(Crew, id=id)
+#     if request.method == "POST":
+#         crew.delete()
+#         messages.success(request, 'Crew Berhasil Dihapus')
+#     return redirect('crew_main')
+
 @check_permission
 def crew_delete(request, id):
     crew = get_object_or_404(Crew, id=id)
+    
+    # Jika metode request adalah POST, maka lakukan penghapusan
     if request.method == "POST":
         crew.delete()
         messages.success(request, 'Crew Berhasil Dihapus')
     return redirect('crew_main')
-    # return render(request, 'crew_confirm_delete.html', {'crew': crew})
+
+class CrewForm(forms.ModelForm):
+    class Meta:
+        model = Crew
+        fields = ['nama', 'posisi', 'store', 'no_hp', 'tanggal_masuk']

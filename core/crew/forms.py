@@ -15,4 +15,3 @@ class CrewForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CrewForm, self).__init__(*args, **kwargs)
-        # Tidak ada field dinamis yang perlu ditambahkan di sini

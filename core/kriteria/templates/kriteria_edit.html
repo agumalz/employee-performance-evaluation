@@ -1,21 +1,125 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
 
-<div class="d-flex justify-content-center mt-4">
-    <div class="card shadow mb-4" style="width: 60%;">
-        <div class="card-header py-3">
-            <a href="{% url 'kriteria_list' %}" class="btn btn-secondary mt-2">Kembali</a>
-            <h2 class="m-0 font-weight-bold text-primary text-center">Edit Kriteria</h2>
+<!-- Content Wrapper -->
+<div class="content-wrapper">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    
+    <!-- Header -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card bg-primary" style="background: linear-gradient(45deg, #696cff, #8592ff) !important;">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h3 class="card-title text-white mb-2">Edit Kriteria</h3>
+                <p class="card-text text-white mb-0" style="opacity: 0.8;">
+                  Ubah informasi kriteria pada formulir di bawah ini
+                </p>
+              </div>
+              <div>
+                <a href="{% url 'kriteria_list' %}" class="btn btn-light rounded-pill">
+                  <i class="bx bx-arrow-back me-1"></i> Kembali
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="card-body">
-          <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-        </form>
-        </div>
+      </div>
     </div>
+
+    <!-- Form Card -->
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <form method="post" class="row g-4">
+              {% csrf_token %}
+
+              <!-- Nama Kriteria -->
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label">
+                    <i class="bx bx-list-check me-2 text-primary"></i>Nama Kriteria
+                  </label>
+                  <input type="text" name="{{ form.nama.name }}" class="form-control" placeholder="Masukkan nama kriteria" value="{{ form.nama.value }}" required>
+                  {% if form.nama.errors %}
+                    <div class="invalid-feedback d-block">{{ form.nama.errors|join:", " }}</div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- Deskripsi -->
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label">
+                    <i class="bx bx-detail me-2 text-primary"></i>Deskripsi
+                  </label>
+                  <input type="text" name="{{ form.deskripsi.name }}" class="form-control" placeholder="Masukkan deskripsi" value="{{ form.deskripsi.value }}" required>
+                  {% if form.deskripsi.errors %}
+                    <div class="invalid-feedback d-block">{{ form.deskripsi.errors|join:", " }}</div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- Tingkat Kepentingan -->
+             <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label">
+                    <i class="bx bx-bar-chart-alt me-2 text-primary"></i>Tingkat Kepentingan
+                  </label>
+                  <select name="{{ form.tingkat_kepentingan.name }}" class="form-select">
+                    {% for value, label in form.fields.tingkat_kepentingan.choices %}
+                      <option value="{{ value }}" {% if value == form.tingkat_kepentingan.value %}selected{% endif %}>
+                        {{ label }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                  {% if form.tingkat_kepentingan.errors %}
+                    <div class="invalid-feedback d-block">
+                      {{ form.tingkat_kepentingan.errors|join:", " }}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- Jenis Kriteria -->
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label">
+                    <i class="bx bx-category-alt me-2 text-primary"></i>Jenis Kriteria
+                  </label>
+                  <select name="{{ form.jenis.name }}" class="form-select">
+                    {% for value, label in form.fields.jenis.choices %}
+                      <option value="{{ value }}" {% if value == form.jenis.value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                  </select>
+                  {% if form.jenis.errors %}
+                    <div class="invalid-feedback d-block">{{ form.jenis.errors|join:", " }}</div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- Submit Buttons -->
+              <div class="col-12">
+                <div class="d-flex justify-content-end gap-2">
+                  <a href="{% url 'kriteria_list' %}" class="btn btn-label-secondary rounded-pill">
+                    <i class="bx bx-x me-1"></i>Batal
+                  </a>
+                  <button type="submit" class="btn btn-primary rounded-pill">
+                    <i class="bx bx-check me-1"></i>Simpan Perubahan
+                  </button>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 {% endblock %}
-

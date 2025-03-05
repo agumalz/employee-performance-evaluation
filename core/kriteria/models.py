@@ -7,11 +7,11 @@ class Kriteria(models.Model):
     ]
     
     TINGKAT_KEPENTINGAN_CHOICES = [
-        ('paling_penting', 'Paling Penting'),
-        ('sangat_penting', 'Sangat Penting'),
-        ('penting', 'Penting'),
-        ('cukup_penting', 'Cukup Penting'),
-        ('biasa', 'Biasa'),
+        ('paling_penting', 'Paling Penting (30%)'),
+        ('sangat_penting', 'Sangat Penting (25%)'),
+        ('penting', 'Penting (20%)'),
+        ('cukup_penting', 'Cukup Penting (15%)'),
+        ('biasa', 'Biasa (10%)'),
     ]
 
     TINGKAT_KEPENTINGAN_BOBOT = {

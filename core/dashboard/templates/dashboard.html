@@ -1,34 +1,246 @@
-{% extends "base.html" %}
-{% block content %}
-
+{% extends "base.html" %} {% load static %} {% block content %}
 
 <!-- Content wrapper -->
 <div class="content-wrapper">
   <!-- Content -->
-
   <div class="container-xxl flex-grow-1 container-p-y">
+    <!-- Welcome Message -->
     <div class="row">
-      <div class="col-lg-8 mb-4 order-0">
-        <div class="card">
-          <div class="d-flex align-items-end row">
-            <div class="col-sm-7">
-              <div class="card-body">
-                <h5 class="card-title text-primary">Hi, Welcome {{ user.username }}!</h5>
-                <p class="mb-4">
-                  Senang melihat mu kembali!
-                </p>
-
-                <!-- <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a> -->
+      <div class="col-lg-12 mb-4 order-0">
+        <div
+          class="card overflow-hidden"
+          style="
+            background: linear-gradient(45deg, #696cff, #8592ff);
+            border: none;
+            border-radius: 15px;
+          "
+        >
+          <div class="card-body" style="position: relative">
+            <div class="row">
+              <div class="col-sm-7">
+                <div class="text-white">
+                  <h5
+                    class="card-title mb-3 text-white"
+                    style="font-size: 2rem; font-weight: 700"
+                  >
+                    Hai, Selamat Datang <strong>{{ user.username }}</strong> 👋
+                  </h5>
+                  <p class="mb-4" style="font-size: 1.1rem; opacity: 0.9">
+                    Kami senang melihat Anda kembali! Kelola bisnis Anda dengan
+                    mudah.
+                  </p>
+                  <div class="d-flex align-items-center mt-4">
+                    <div class="avatar me-3">
+                      <i
+                        class="bx bx-coffee text-white"
+                        style="font-size: 2.5rem"
+                      ></i>
+                    </div>
+                    <div>
+                      <small class="text-white opacity-75">Status</small>
+                      <h6 class="mb-0 text-white">
+                        {{ user.profile.position|title }}
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-5 text-center text-sm-end">
+                <div class="card-body pb-0 px-0 px-md-4">
+                  <img
+                    src="{% static 'assets/img/illustrations/man-with-laptop-light.png' %}"
+                    height="140"
+                    alt="Coffee Shop Illustration"
+                    style="
+                      filter: brightness(0) invert(1);
+                      opacity: 0.9;
+                      position: absolute;
+                      right: 0;
+                      bottom: 0;
+                    "
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      
-
-    
     </div>
+
+    <!-- Chart Section -->
+    <div class="row">
+      <div class="col-lg-9 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Grafik Penilaian Karyawan</h5>
+            <canvas id="karyawanChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Small Cards Section -->
+      <div class="col-lg-3 mb-4">
+        <div class="row">
+          <!-- Kelola Karyawan Card -->
+          <div class="col-12 mb-4">
+            <div
+              class="card h-100"
+              style="
+                border: none;
+                border-radius: 15px;
+                transition: transform 0.3s ease;
+              "
+            >
+              <div class="card-body text-center p-4">
+                <div
+                  class="avatar avatar-md mx-auto mb-3"
+                  style="
+                    background-color: rgba(105, 108, 255, 0.1);
+                    padding: 15px;
+                    border-radius: 12px;
+                  "
+                >
+                  <i
+                    class="bx bx-group"
+                    style="font-size: 2rem; color: #696cff"
+                  ></i>
+                </div>
+                <h5
+                  class="card-title mb-3"
+                  style="color: #696cff; font-weight: 600"
+                >
+                  Kelola Karyawan
+                </h5>
+                <p class="card-text text-muted mb-4">
+                  Lihat dan kelola data karyawan dalam sistem dengan mudah dan
+                  efisien.
+                </p>
+                <a
+                  href="{% url 'crew_main' %}"
+                  class="btn btn-primary w-100 rounded-pill"
+                  style="
+                    background: linear-gradient(45deg, #696cff, #8592ff);
+                    border: none;
+                    padding: 12px;
+                    transition: all 0.3s ease;
+                  "
+                >
+                  <i class="bx bx-user-pin me-2"></i>Kelola Karyawan
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hasil Penilaian Card -->
+          <div class="col-12 mb-4">
+            <div
+              class="card h-100"
+              style="
+                border: none;
+                border-radius: 15px;
+                transition: transform 0.3s ease;
+              "
+            >
+              <div class="card-body text-center p-4">
+                <div
+                  class="avatar avatar-md mx-auto mb-3"
+                  style="
+                    background-color: rgba(105, 108, 255, 0.1);
+                    padding: 15px;
+                    border-radius: 12px;
+                  "
+                >
+                  <i
+                    class="bx bx-chart"
+                    style="font-size: 2rem; color: #696cff"
+                  ></i>
+                </div>
+                <h5
+                  class="card-title mb-3"
+                  style="color: #696cff; font-weight: 600"
+                >
+                  Hasil Penilaian
+                </h5>
+                <p class="card-text text-muted mb-4">
+                  Pantau dan analisis laporan penilaian kinerja karyawan secara
+                  detail.
+                </p>
+                <a
+                  href="{% url 'hasil_perhitungan_view' %}"
+                  class="btn btn-primary w-100 rounded-pill"
+                  style="
+                    background: linear-gradient(45deg, #696cff, #8592ff);
+                    border: none;
+                    padding: 12px;
+                    transition: all 0.3s ease;
+                  "
+                >
+                  <i class="bx bx-bar-chart-alt-2 me-2"></i>Lihat Hasil
+                  Penilaian
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom Style -->
+    <style>
+      .card {
+        box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+      }
+
+      .btn-primary:hover {
+        background: linear-gradient(45deg, #5a5eeb, #7279ff) !important;
+        box-shadow: 0 5px 15px rgba(105, 108, 255, 0.2);
+      }
+
+      .avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      @media (max-width: 767px) {
+        .card-title {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
   </div>
   <!-- / Content -->
+</div>
+<!-- / Content wrapper -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    fetch("{% url 'dashboard:dashboard_chart_data' %}") // Panggil API
+      .then((response) => response.json())
+      .then((data) => {
+        const ctx = document.getElementById("karyawanChart").getContext("2d");
+
+        new Chart(ctx, {
+          type: "bar",
+          data: data, // Data langsung dari API
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { position: "top" },
+            },
+            scales: {
+              y: { beginAtZero: true },
+            },
+          },
+        });
+      })
+      .catch((error) => console.error("Error fetching chart data:", error));
+  });
+</script>
 
 {% endblock %}

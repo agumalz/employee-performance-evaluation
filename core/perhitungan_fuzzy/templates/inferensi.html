@@ -37,9 +37,14 @@
             </div>
         </div>
     {% endfor %}
-    
     <div class="text-center mt-4">
-        <a href="{% url 'defuzzifikasi_view' %}" class="btn btn-success btn-lg">Lanjutkan ke Defuzzifikasi</a>
+        <a href="javascript:history.back()" class="btn btn-secondary btn-lg mr-2">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+        <a href="{% url 'defuzzifikasi_view' %}" class="btn btn-success btn-lg">
+            Lanjutkan ke Defuzzifikasi<i class="fas fa-arrow-right"></i>
+        </a>
     </div>
+    
 </div>
 {% endblock %}

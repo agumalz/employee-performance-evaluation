@@ -25,4 +25,5 @@ urlpatterns = [
     path('kriteria/', include('kriteria.urls')),
     path('KaryawanKriteria/', include('KaryawanKriteria.urls')), 
     path('perhitungan_fuzzy/', include('perhitungan_fuzzy.urls')), 
+    path('saw_perhitungan/', include('saw_perhitungan.urls')), 
 ]

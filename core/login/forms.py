@@ -12,12 +12,16 @@ class RegisterForm(forms.Form):
             "class" : "form-control form-control-user"
             })
         )
-    position = forms.CharField(
-        max_length=255,
-        widget=forms.TextInput(attrs={
-            "class" : "form-control form-control-user"
-            })
-        )
+    POSITION_CHOICES = [
+        ('manager', 'Manager'),
+        ('admin', 'Admin'),
+    ]
+    position = forms.ChoiceField(
+        choices=POSITION_CHOICES,
+        widget=forms.Select(attrs={
+            "class": "form-control form-control-user"
+        })
+    )
     password = forms.CharField(
         max_length=255, 
         widget=forms.PasswordInput(attrs={
@@ -46,14 +50,4 @@ class LoginForm(forms.Form):
             "placeholder" : "Password"
             })
         )
-    POSITION_CHOICES = [
-        ('crew', 'Crew'),
-        ('admin', 'Admin'),
-        ('manager', 'Manager'),
-    ]
-    position = forms.ChoiceField(
-        choices=POSITION_CHOICES,
-        widget=forms.Select(attrs={
-            "class": "form-control form-control-user"
-        })
-    )
+    

@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'kriteria',
     'KaryawanKriteria',
     'perhitungan_fuzzy',
+    'saw_perhitungan',
+    'widget_tweaks'
 ]
 
 MIDDLEWARE = [

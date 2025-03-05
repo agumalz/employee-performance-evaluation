@@ -1,16 +1,16 @@
 from django.shortcuts import render
-from KaryawanKriteria.models import KaryawanKriteria, Crew
+from KaryawanKriteria.models import KaryawanKriteria, Crew, Kriteria
 from .fuzzy_logic import fuzzifikasi, calculate_alpha_predicate_and_z, rules
+from .models import PerhitunganFuzzy
 
 # View untuk menampilkan hasil fuzzifikasi untuk semua karyawan
 def fuzzifikasi_view(request):
-    karyawan_list = Crew.objects.all()
+    karyawan_list = Crew.objects.all().prefetch_related('karyawankriteria_set__kriteria')
     fuzzifikasi_results = []
 
     for karyawan in karyawan_list:
-        karyawan_kriteria = KaryawanKriteria.objects.filter(karyawan=karyawan)
         kriteria_dict = {}
-        for item in karyawan_kriteria:
+        for item in karyawan.karyawankriteria_set.all():
             kriteria_dict[item.kriteria.nama] = fuzzifikasi(item.nilai)
         fuzzifikasi_results.append({
             'karyawan': karyawan,
@@ -24,15 +24,14 @@ def fuzzifikasi_view(request):
 
 # View untuk menampilkan hasil inferensi (alpha predikat dan z) untuk semua karyawan
 def inferensi_view(request):
-    karyawan_list = Crew.objects.all()
+    karyawan_list = Crew.objects.all().prefetch_related('karyawankriteria_set__kriteria')
     inferensi_results = []
 
     for karyawan in karyawan_list:
-        karyawan_kriteria = KaryawanKriteria.objects.filter(karyawan=karyawan)
         kriteria_dict = {}
         karyawan_inferensi = []
 
-        for item in karyawan_kriteria:
+        for item in karyawan.karyawankriteria_set.all():
             kriteria_dict[item.kriteria.nama] = fuzzifikasi(item.nilai)
 
         for rule in rules:
@@ -55,16 +54,15 @@ def inferensi_view(request):
 
 # View untuk menampilkan hasil defuzzifikasi (hasil akhir) untuk semua karyawan
 def defuzzifikasi_view(request):
-    karyawan_list = Crew.objects.all()
+    karyawan_list = Crew.objects.all().prefetch_related('karyawankriteria_set__kriteria')
     defuzzifikasi_results = []
 
     for karyawan in karyawan_list:
-        karyawan_kriteria = KaryawanKriteria.objects.filter(karyawan=karyawan)
         kriteria_dict = {}
         total_alpha_z = 0
         total_alpha = 0
 
-        for item in karyawan_kriteria:
+        for item in karyawan.karyawankriteria_set.all():
             kriteria_dict[item.kriteria.nama] = fuzzifikasi(item.nilai)
 
         for rule in rules:
@@ -83,6 +81,12 @@ def defuzzifikasi_view(request):
         else:
             kinerja = "Buruk"
 
+        # Simpan hasil ke dalam model PerhitunganFuzzy
+        PerhitunganFuzzy.objects.update_or_create(
+            karyawan=karyawan,
+            defaults={'hasil_akhir': hasil_akhir, 'kinerja': kinerja}
+        )
+
         defuzzifikasi_results.append({
             'karyawan': karyawan,
             'hasil_akhir': hasil_akhir,
@@ -94,24 +98,21 @@ def defuzzifikasi_view(request):
     }
     return render(request, 'defuzzifikasi.html', context)
 
-from kriteria.models import Kriteria  # Pastikan Anda mengimpor model Kriteria
-from crew.models import Crew
-from KaryawanKriteria.models import KaryawanKriteria
 
+# View untuk menampilkan overview karyawan dan nilai kriteria mereka
 def karyawan_kriteria_overview(request):
-    karyawan_list = Crew.objects.all()
-    kriteria_list = Kriteria.objects.all()  # Dapatkan semua kriteria
+    karyawan_list = Crew.objects.all().prefetch_related('karyawankriteria_set__kriteria')
+    kriteria_list = Kriteria.objects.all()
     penilaian_data = []
 
     for karyawan in karyawan_list:
-        nilai_kriteria = KaryawanKriteria.objects.filter(karyawan=karyawan)
+        nilai_kriteria = karyawan.karyawankriteria_set.all()
         penilaian_data.append({
             'karyawan': karyawan,
             'nilai_kriteria': nilai_kriteria,
         })
 
     context = {
-        'karyawan_list': karyawan_list,
         'kriteria_list': kriteria_list,
         'penilaian_data': penilaian_data,
     }
